@@ -2,60 +2,27 @@ package Tobyliao;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-	public static void main(String args[]) {
-		//Define
-		ServerSocket MyService = null;
-		String line;
-		DataInputStream input=null;
-		PrintStream output=null;
-		Socket clientSocket = null;
+	public static void main(String[] args){  
+		try{  
+		ServerSocket ss=new ServerSocket(1024);  
+		Socket s=ss.accept();//establishes connection   
 		
-		//set up a server socket on 1024
-		try {
-			MyService = new ServerSocket(1024);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
-			//e.printStackTrace();
-		}
-	
+		DataInputStream dis=new DataInputStream(s.getInputStream());  
+		String  str=(String)dis.readUTF();  
+		System.out.println("message= "+str); 
 		
-		try {
-			clientSocket = MyService.accept();
-			input = new DataInputStream(clientSocket.getInputStream());
-			output = new PrintStream(clientSocket.getOutputStream());
-			while(true) {
-				line = input.readLine();
-	            output.println(line);
-			}
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			System.out.println(e);
-		}
+		DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
+		dout.writeUTF("B10307110");  
+		dout.flush();  
+		
+		dout.close();  
+		ss.close();  
+		}catch(Exception e){System.out.println(e);}  
+	}  
 
-		
-		
-//		try {
-//			output.close();
-//			input.close();
-//			clientSocket.close();
-//			MyService.close();
-//			
-//			
-//		}catch(IOException e) {
-//			System.out.println(e);
-//		}
-		
-		
-		
-		
-	}
+
 }
